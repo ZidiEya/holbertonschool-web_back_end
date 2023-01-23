@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+
 """ 
-func that define and annotate the following variables with the specified values
+func that define and annotate the following variables
+with the specified values
 """
 a: int = 1
 pi: float = 3.14
