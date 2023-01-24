@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-Execute multiple coroutines at the same time with async
+execute multiple coroutines at the same time with async
 '''
 
 import asyncio
@@ -17,14 +17,14 @@ async def wait_n(n: int, max_delay: int) -> List[float]:
     The list of the delays should be in ascending order without using
     sort() because of concurrency.
     '''
-            tasks = []
-                delays = []
+    tasks = []
+    delays = []
 
-                    for _ in range(n):
-                                tasks.append(asyncio.create_task(wait_random(max_delay)))
+    for _ in range(n):
+        tasks.append(asyncio.create_task(wait_random(max_delay)))
 
-                                    # Create queue with results depending on the function have the result ready
-                                            for task in asyncio.as_completed(tasks):
-                                                        delays.append(await task)
+    # Create queue with results depending on the function have the result ready
+    for task in asyncio.as_completed(tasks):
+        delays.append(await task)
 
-                                                            return delays
+    return delays
