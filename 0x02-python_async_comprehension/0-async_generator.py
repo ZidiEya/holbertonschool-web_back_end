@@ -7,7 +7,6 @@ import random
 from typing import Generator
 
 
-
 async def async_generator() -> Generator[float, None, None]:
     """func that generates a random number"""
     for i in range(10):
