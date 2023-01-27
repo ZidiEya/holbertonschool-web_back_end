@@ -1,35 +1,48 @@
-#!/usr/bin/env python3
-""" caching systems """
+#!/usr/bin/python3
 
-from base_caching import BaseCaching
+'''
+MRU Caching
+'''
+from collections import deque
+BaseCaching = __import__('base_caching').BaseCaching
 
 
 class MRUCache(BaseCaching):
-    """ LRU cach system """
+    """
+    Inherits from BaseCaching and is a caching system
+    """
 
     def __init__(self):
-        ''' Init class instance. '''
+        """
+        Init
+        """
+        self.queued_item = deque()
+        self.lru_item = []
         super().__init__()
-        self.current_keys = []
 
     def put(self, key, item):
-        """ Adding an item in the cache """
-        if key is not None or item is not None:
-            self.cache_data[key] = item
-            if key not in self.current_keys:
-                self.current_keys.append(key)
+        """
+       Print the most recently used item (MRU algorithm)
+        """
+        if key is not None and item is not None:
+            if key in self.cache_data:
+                self.cache_data[key] = item
+                self.lru_item.remove(key)
             else:
-                self.current_keys.append(self.current_keys.pop(
-                    self.current_keys.index(key)))
-            if len(self.current_keys) > BaseCaching.MAX_ITEMS:
-                discarded_key = self.current_keys.pop(-2)
-                del self.cache_data[discarded_key]
-                print('DISCARD: {}'.format(discarded_key))
+                if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+                    del self.cache_data[self.lru_item[-1]]
+                    print("DISCARD:", self.lru_item[-1])
+                    self.lru_item.pop(-1)
+                self.cache_data[key] = item
+            self.lru_item.append(key)
 
     def get(self, key):
-        """ Geting an item by key """
-        if key is not None and key in self.cache_data:
-            self.current_keys.append(self.current_keys.pop(
-                self.current_keys.index(key)))
+        """
+        Return value of cache_data linked to key
+        """
+        if key in self.cache_data:
+            self.lru_item.remove(key)
+            self.lru_item.append(key)
             return self.cache_data.get(key)
-        return None
+        else:
+            return None
