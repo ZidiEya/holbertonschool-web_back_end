@@ -54,14 +54,14 @@ def get_logger() -> logging.Logger:
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """ func that returns a connector to the database """
     return mysql.connector.connect(
-                    host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
-                    database=os.environ.get('PERSONAL_DATA_DB_NAME', 'root'),
-                    user=os.environ.get('PERSONAL_DATA_DB_USERNAME'),
-                    password=os.environ.get('PERSONAL_DATA_DB_PASSWORD', ''))
+        host=os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost'),
+        database=os.environ.get('PERSONAL_DATA_DB_NAME', 'root'),
+        user=os.environ.get('PERSONAL_DATA_DB_USERNAME'),
+        password=os.environ.get('PERSONAL_DATA_DB_PASSWORD', ''))
 
 
 def main():
-    """ func obtain a database connection using get_db and retrieve all rows in the
+    """ func obtain a database connection using get_db and retrieve rows
         users table and display each row under a filtered format """
     db = get_db()
     cursor = db.cursor()
