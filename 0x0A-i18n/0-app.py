@@ -1,20 +1,14 @@
 #!/usr/bin/env python3
-
-"""Router module for the API
+""" Basic Flask app
 """
-
 from flask import Flask, render_template
-
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'], strict_slashes=False)
-def welcome() -> str:
-    """ GET /
-    Return:
-        Hello world
-    """
-    return render_template('index.html')
+@app.route("/", methods=["GET"])
+def index():
+    """ Returns index """
+    return render_template("0-index.html")
 
 
 if __name__ == "__main__":
