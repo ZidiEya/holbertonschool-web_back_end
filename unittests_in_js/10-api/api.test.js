@@ -1,49 +1,76 @@
-const request = require('supertest');
-const app = require('./api');
-const { expect } = require('chai');
+const request = require('request');
+const chai = require('chai');
 
-describe('API tests', () => {
-  describe('GET /available_payments', () => {
-    it('should return correct payment methods', (done) => {
-      request(app)
-        .get('/available_payments')
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err);
-          expect(res.body).to.deep.equal({
-            payment_methods: {
-              credit_cards: true,
-              paypal: false
-            }
-          });
-          done();
-        });
+describe('gET /', () => {
+  it('endpoint: GET /', () => new Promise((done) => {
+    const call = {
+      url: 'http://localhost:7865',
+      method: 'GET',
+    };
+    request(call, (error, response, body) => {
+      chai.expect(response.statusCode).to.equal(200);
+      chai.expect(body).to.equal('Welcome to the payment system');
+      done();
     });
-  });
+  }));
+});
 
-  describe('POST /login', () => {
-    it('should return welcome message with username', (done) => {
-      request(app)
-        .post('/login')
-        .send({ userName: 'Betty' })
-        .expect(200)
-        .end((err, res) => {
-          if (err) return done(err);
-          expect(res.text).to.equal('Welcome Betty');
-          done();
-        });
+describe('gET /cart/:id', () => {
+  it('endpoint: GET /cart/:id', () => new Promise((done) => {
+    const call = {
+      url: 'http://localhost:7865/cart/12',
+      method: 'GET',
+    };
+    request(call, (error, response, body) => {
+      chai.expect(response.statusCode).to.equal(200);
+      chai.expect(body).to.equal('Payment methods for cart 12');
+      done();
     });
+  }));
+});
 
-    it('should return 400 if no username is sent', (done) => {
-      request(app)
-        .post('/login')
-        .send({})
-        .expect(400)
-        .end((err, res) => {
-          if (err) return done(err);
-          expect(res.text).to.equal('Missing userName');
-          done();
-        });
+describe('gET /cart/:isNaN', () => {
+  it('endpoint: GET /cart/:isNaN', () => new Promise((done) => {
+    const call = {
+      url: 'http://localhost:7865/cart/anything',
+      method: 'GET',
+    };
+    request(call, (error, response, body) => {
+      chai.expect(response.statusCode).to.equal(404);
+      done();
     });
-  });
+  }));
+});
+
+describe('gET /available_payments', () => {
+  it('endpoint: GET /available_payments', () => new Promise((done) => {
+    const call = {
+      url: 'http://localhost:7865/available_payments',
+      method: 'GET',
+    };
+    request(call, (error, response, body) => {
+      chai.expect(response.statusCode).to.equal(200);
+      chai.expect(body).to.equal(
+        '{"payment_methods":{"credit_cards":true,"paypal":false}}',
+      );
+      done();
+    });
+  }));
+});
+
+describe('pOST /login', () => {
+  it('pOST /login', () => new Promise((done) => {
+    const call = {
+      url: 'http://localhost:7865/login',
+      method: 'POST',
+      json: {
+        userName: 'Marty',
+      },
+    };
+    request(call, (error, response, body) => {
+      chai.expect(response.statusCode).to.equal(200);
+      chai.expect(body).to.equal('Welcome Marty');
+      done();
+    });
+  }));
 });
