@@ -1,33 +1,22 @@
 const express = require('express');
+
 const app = express();
 const port = 7865;
 
-app.use(express.json()); // needed to parse JSON body
-
-// Existing routes from 9-api here...
-
-// New GET /available_payments endpoint
+app.get('/', (req, res) => res.end('Welcome to the payment system'));
+app.get('/cart/:id([0-9]+)', (req, res) => {
+  res.end(`Payment methods for cart ${req.params.id}`);
+});
 app.get('/available_payments', (req, res) => {
-  res.json({
+  const obj = {
     payment_methods: {
       credit_cards: true,
-      paypal: false
-    }
-  });
+      paypal: false,
+    },
+  };
+  res.json(obj);
 });
-
-// New POST /login endpoint
 app.post('/login', (req, res) => {
-  const { userName } = req.body;
-  if (!userName) {
-    return res.status(400).send('Missing userName');
-  }
-  res.send(`Welcome ${userName}`);
+  res.end(`Welcome ${req.body.userName}`);
 });
-
-// Start server
-app.listen(port, () => {
-  console.log(`API available on localhost port ${port}`);
-});
-
-module.exports = app; // export for testing
+app.listen(port, () => console.log(`API available on localhost port ${port}`));
